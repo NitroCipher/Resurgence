@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         ResurgenceUserscript
 // @namespace    http://tampermonkey.net/
-// @version      6.1
+// @version      b7.1
 // @description  Tries to fix and improve certain aspects of Scratch
 // @author       Wetbikeboy2500
 // @match        https://scratch.mit.edu/*
@@ -48,6 +48,9 @@
     } 
     document.addEventListener("DOMContentLoaded", () => {
         var styleTip ='.tips a span { display: none; position: absolute; } .tips a:after { content: "' + GM_getValue("forumTitle", "Forums") + '"; visibility: visible; position: static; } .phosphorus { margin-left: 14px; margin-right: 14px; margin-top: 16px; } .my_select {height: 34px; line-height: 34px; vertical-align: middle; margin: 3px 0px 3px 0px; width: 110px;} .messages-social {width: 700px; right: 446.5px; left: 235.5px; position: relative; border: 0.5px solid #F0F0F0; border-top-left-radius: 5px; border-top-right-radius: 5px; border-bottom-left-radius: 5px; border-bottom-right-radius: 5px; background-color: #F2F2F2; } .messages-header {font-size: 24px; padding-left: 10px;} select[name="messages.filter"] {right: 720px; top: 20px; font-size: 24px; position: relative; border-top-left-radius: 5px; border-top-right-radius: 5px; border-bottom-left-radius: 5px; border-bottom-right-radius: 5px; background-color: #F2F2F2; visibility: visible;} #___gcse_0 {display: none;} .messages-details {margin-top: 40px;} .mod-messages {visibility: hidden; height: 0px; padding: 0px; margin: 0px;}';
+        styleTip = styleTip + '.create a span { display: none; position: absolute; } .create a:after { content: "' + GM_getValue("createTitle", "Create") + '"; visibility: visible; position: static; }'
+        styleTip = styleTip + '.explore a span { display: none; position: absolute; } .explore a:after { content: "' + GM_getValue("exploreTitle", "Explore") + '"; visibility: visible; position: static; }'
+        styleTip = styleTip + '.about a span { display: none; position: absolute; } .about a:after { content: "' + GM_getValue("aboutTitle", "About") + '"; visibility: visible; position: static; }'
         GM_addStyle(styleTip);
         dark_theme();
         fix_nav();
@@ -61,12 +64,24 @@
     function fix_nav () {
         //fixes navbar
         if (document.getElementById("navigation") !== null) {
-            document.getElementsByClassName("tips")[0].childNodes[0].setAttribute("href", "/discuss");
+            document.getElementsByClassName("tips")[0].childNodes[0].setAttribute("href", GM_getValue("forumLink", "/discuss"));
+            document.getElementsByClassName("create")[0].childNodes[0].setAttribute("href", GM_getValue("createLink", "/projects/editor"));
+            document.getElementsByClassName("explore")[0].childNodes[0].setAttribute("href", GM_getValue("exploreLink", "/explore/projects/all"));
+            document.getElementsByClassName("about")[0].childNodes[0].setAttribute("href", GM_getValue("aboutLink", "/about"));
             console.log("New Theme");
         } else {
             let tips = document.getElementsByClassName("site-nav")[0].childNodes[3].childNodes[0];
-            tips.setAttribute("href", "/discuss");
+            tips.setAttribute("href", GM_getValue("forumLink", "/discuss"));
             tips.innerHTML = GM_getValue("forumTitle", "Forums");
+            let create = document.getElementsByClassName("site-nav")[0].childNodes[1].childNodes[0];
+            create.setAttribute("href", GM_getValue("createLink", "/projects/editor"));
+            create.innerHTML = GM_getValue("createTitle", "Create");
+            let explore = document.getElementsByClassName("site-nav")[0].childNodes[2].childNodes[0];
+            explore.setAttribute("href", GM_getValue("exploreLink", "/explore/projects/all"));
+            explore.innerHTML = GM_getValue("exploreTitle", "Explore");
+            let about = document.getElementsByClassName("site-nav")[0].childNodes[4].childNodes[0];
+            about.setAttribute("href", GM_getValue("aboutLink", "/about"));
+            about.innerHTML = GM_getValue("aboutTitle", "About");
             console.log("Old Theme");
         }
     }
@@ -102,6 +117,13 @@
                 }
                 $("#playerIO").val(GM_getValue("player", "D"));
                 $("#disText").val(GM_getValue("forumTitle", "Forums"));
+                $("#b1Text").val(GM_getValue("createTitle", "Create"));
+                $("#b2Text").val(GM_getValue("exploreTitle", "Explore"));
+                $("#b4Text").val(GM_getValue("aboutTitle", "About"));
+                $("#disLink").val(GM_getValue("forumLink", "/discuss"));
+                $("#b1Link").val(GM_getValue("createLink", "/projects/editor"));
+                $("#b2Link").val(GM_getValue("exploreLink", "/explore/projects/all"));
+                $("#b4Link").val(GM_getValue("aboutLink", "/about"));
                 displaySettingsModal = true;
             }
         }
@@ -132,7 +154,7 @@
         //adds popup settings modal
         GM_addStyle('.modal-hidden {display:none;} #res-set-modal {position:fixed; background-color:#00000000; width:40%; height:80%; border-radius:5px; outline:none; left:30%; top:10%; z-index: 9999; color: black !important; padding:20px; text-align:center;} #res-set-modal-back {position:fixed; width: 100%; height: 100%; background-color:#212121; left:0; top:0; z-index:9998; opacity:.5;}');
         $('body').append('<div id="res-set-modal" class="modal-hidden" tabindex="1">');
-        $('#res-set-modal').load("https://raw.githubusercontent.com/Wetbikeboy2500/ScratchFixer/master/modal.html");
+        $('#res-set-modal').load("https://raw.githubusercontent.com/NitroCipher/Resurgence/Navbar-customizing/modal.html");
 
         $('body').append('<div id="res-set-modal-back" class="modal-hidden">');
         $('#res-set-modal-back').click(toggleModal);
@@ -185,9 +207,30 @@
             GM_setValue("player", document.getElementById("playerIO").value);        
         });
         $(document).on("change", "#disText", (event) => {
-            console.log(document.getElementById("playerIO").value);
             GM_setValue("forumTitle", document.getElementById("disText").value);
         });
+        $(document).on("change", "#b1Text", (event) => {
+            GM_setValue("createTitle", document.getElementById("b1Text").value);
+        });
+        $(document).on("change", "#b2Text", (event) => {
+            GM_setValue("exploreTitle", document.getElementById("b2Text").value);
+        });
+        $(document).on("change", "#b4Text", (event) => {
+            GM_setValue("aboutTitle", document.getElementById("b4Text").value);
+        });
+        $(document).on("change", "#disLink", (event) => {
+            GM_setValue("forumLink", document.getElementById("disLink").value);
+        });
+        $(document).on("change", "#b1Link", (event) => {
+            GM_setValue("createLink", document.getElementById("b1Link").value);
+        });
+        $(document).on("change", "#b2Link", (event) => {
+            GM_setValue("exploreLink", document.getElementById("b2Link").value);
+        });
+        $(document).on("change", "#b4Link", (event) => {
+            GM_setValue("aboutLink", document.getElementById("b4Link").value);
+        });
+
 
         //adds the new page
         if ("https://scratch.mit.edu/resurgence" === url) {
