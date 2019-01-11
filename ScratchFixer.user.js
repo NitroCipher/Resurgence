@@ -1645,14 +1645,14 @@ SOFTWARE.
                         replaceIt($('textarea')[0], constBB);
                     })
                     .insertAfter(".markItUpButton5");
-                $(`<li class="markItUpButton" id="Res7"><a title="Align Left" style="background-image: url('https://png.icons8.com/align-text-left/office/16/000000');" >Align Left</a></li>`)
+                $(`<li class="markItUpButton" id="Res7"><a title="Align Left" style="background-image: url('https://png.icons8.com/align-left/office/16/000000');" >Align Left</a></li>`)
                     .on("click", (e) => {
                         let constBB = "[color=res.left]" + document.stringyBB + "[/color]";
                         alert("This will only appear on the main page, not the preview");
                         replaceIt($('textarea')[0], constBB);
                     })
                     .insertAfter("#Res3");
-                $(`<li class="markItUpButton" id="Res8"><a title="Align Right" style="background-image: url('https://png.icons8.com/align-text-right/office/16/000000');" >Align Right</a></li>`)
+                $(`<li class="markItUpButton" id="Res8"><a title="Align Right" style="background-image: url('https://png.icons8.com/align-right/office/16/000000');" >Align Right</a></li>`)
                     .on("click", (e) => {
                         let constBB = "[color=res.right]" + document.stringyBB + "[/color]";
                         alert("This will only appear on the main page, not the preview");
